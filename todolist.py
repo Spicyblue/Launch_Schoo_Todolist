@@ -79,6 +79,12 @@ Raise a TypeError exception if the argument isn't a Todo object.
 
     def __len__(self):
         return len(self._todos)
+    
+    def first(self):
+        return self._todos[0]
+    
+    def last(self):
+        return self._todos[-1]
 
     def __str__(self):
         output_lines = [f'----- {self._title} -----']
@@ -140,9 +146,32 @@ def step_3():
     print(len(todo_list))              # 3
     print(len(empty_todo_list))        # 0
 
+
+def step_4():
+    '''
+    Retrieving the First and Last Todos
+    '''
+    print('--------------------------------- Step 4')
+    todo_list = setup()
+
+    print(todo_list.first())           # [ ] Buy milk
+    print(todo_list.last())            # [ ] Go to gym
+
+    try:
+        empty_todo_list.first()
+    except IndexError:
+        print('Expected IndexError: Got it!')
+
+    try:
+        empty_todo_list.last()
+    except IndexError:
+        print('Expected IndexError: Got it!')
+
+step_4()
 def main():
     step_1()
     step_2()
     step_3()
+    step_4()
 
 main()
