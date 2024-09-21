@@ -30,8 +30,8 @@ class Todo:
     IS_UNDONE = ' '
 
     def __init__(self, title):
-        self.title = title
-        self.done = False
+        self._title = title
+        self._done = False
 
     @property
     def title(self):
@@ -61,35 +61,88 @@ class Todo:
             return f"[{self.IS_DONE}] {self._title}"
         
         return f"[{self.IS_UNDONE}] {self._title}"
-    
-def test_todo():
+
+class TodoList:
+    '''
+Create an add method to append a Todo object to the end of the TodoList object.
+Raise a TypeError exception if the argument isn't a Todo object.
+'''
+    def __init__(self, title):
+        self._title = title
+        self._todos = []
+
+    def add(self, todo):
+        if not isinstance(todo, Todo):
+            raise TypeError('Can only add Todo Object ')
+        
+        self._todos.append(todo)
+
+    def __len__(self):
+        return len(self._todos)
+
+    def __str__(self):
+        output_lines = [f'----- {self._title} -----']
+        output_lines += [str(todo) for todo in self._todos]
+        return '\n'.join(output_lines)
+
+def setup():
     todo1 = Todo('Buy milk')
     todo2 = Todo('Clean room')
     todo3 = Todo('Go to gym')
-    todo4 = Todo('Clean room')
 
-    print(todo1)                  # [ ] Buy milk
-    print(todo2)                  # [ ] Clean room
-    print(todo3)                  # [ ] Go to gym
-    print(todo4)                  # [ ] Clean room
+    todo2.done = True
 
-    print(todo2 == todo4)         # True
-    print(todo1 == todo2)         # False
-    print(todo4.done)             # False
+    todo_list = TodoList("Today's Todos")
+    todo_list.add(todo1)
+    todo_list.add(todo2)
+    todo_list.add(todo3)
 
-    todo1.done = True
-    todo4.done = True
-    print(todo4.done)             # True
+    return todo_list
 
-    print(todo1)                  # [X] Buy milk
-    print(todo2)                  # [ ] Clean room
-    print(todo3)                  # [ ] Go to gym
-    print(todo4)                  # [X] Clean room
+empty_todo_list = TodoList('Nothing Doing')
 
-    print(todo2 == todo4)         # False
+def step_1():
+    '''
+    Adding Todo Objects to the TodoList
+    '''
+    print('--------------------------------- Step 1')
+    todo_list = setup()
 
-    todo4.done = False
-    print(todo4.done)             # False
-    print(todo4)                  # [ ] Clean room
+    try:
+        todo_list.add(1)
+    except TypeError:
+        print('TypeError detected')    # TypeError detected
 
-test_todo()
+    for todo in todo_list._todos:
+        print(todo)
+
+def step_2():
+    '''
+    Output Formatting
+    '''
+    print('--------------------------------- Step 2')
+    todo_list = setup()
+
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [X] Clean room
+    # [ ] Go to gym
+
+def step_3():
+    '''
+    In this step, you need to customize the behavior of the len function,
+    which you can do with the __len__ magic method.
+    '''
+    print('--------------------------------- Step 3')
+    todo_list = setup()
+
+    print(len(todo_list))              # 3
+    print(len(empty_todo_list))        # 0
+
+def main():
+    step_1()
+    step_2()
+    step_3()
+
+main()
