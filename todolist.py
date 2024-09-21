@@ -56,17 +56,12 @@ class Todo:
         return (self.title == other.title) and (self.done == other.done)
 
     def __str__(self):
-
         if self.done:
             return f"[{self.IS_DONE}] {self._title}"
         
         return f"[{self.IS_UNDONE}] {self._title}"
 
 class TodoList:
-    '''
-Create an add method to append a Todo object to the end of the TodoList object.
-Raise a TypeError exception if the argument isn't a Todo object.
-'''
     def __init__(self, title):
         self._title = title
         self._todos = []
@@ -88,6 +83,18 @@ Raise a TypeError exception if the argument isn't a Todo object.
     
     def to_list(self):
         return list(self._todos)
+    
+    def todo_at(self, idx):
+        if not isinstance(idx, int):
+            raise TypeError('Please enter an number')
+        
+        return self._todos[idx]
+    
+    def mark_done_at(self, idx):
+        self.todo_at(idx).done = True
+
+    def mark_undone_at(self, idx):
+        self.todo_at(idx).done = False
 
     def __str__(self):
         output_lines = [f'----- {self._title} -----']
@@ -112,7 +119,7 @@ empty_todo_list = TodoList('Nothing Doing')
 
 def step_1():
     '''
-    Adding Todo Objects to the TodoList
+    Adding Todo Objects to the TodoList.
     '''
     print('--------------------------------- Step 1')
     todo_list = setup()
@@ -127,7 +134,7 @@ def step_1():
 
 def step_2():
     '''
-    Output Formatting
+    Output Formatting.
     '''
     print('--------------------------------- Step 2')
     todo_list = setup()
@@ -151,7 +158,7 @@ def step_3():
 
 def step_4():
     '''
-    Retrieving the First and Last Todos
+    Retrieving the First and Last Todos.
     '''
     print('--------------------------------- Step 4')
     todo_list = setup()
@@ -171,7 +178,7 @@ def step_4():
 
 def step_5():
     '''
-    Obtaining Todos as a List
+    Obtaining Todos as a List.
     '''
     print('--------------------------------- Step 5')
     todo_list = setup()
@@ -186,14 +193,88 @@ def step_5():
                                         # [X] Clean room
                                         # [ ] Go to gym
 
-step_5()
+def step_6():
+    '''
+    Retrieve Todo by Index Position.
+    '''
+    print('--------------------------------- Step 6')
+    todo_list = setup()
 
-step_4()
+    print(todo_list.todo_at(0))        # [ ] Buy milk
+    print(todo_list.todo_at(1))        # [X] Clean room
+    print(todo_list.todo_at(2))        # [ ] Go to gym
+
+    try:
+        todo_list.todo_at(3)
+    except IndexError:
+        print('Expected IndexError: Got it!')
+
+    # Ensure we have a reference
+    print(todo_list.todo_at(1) is todo_list.todo_at(1))  # True
+
+def step_7():
+    print('--------------------------------- Step 7')
+    todo_list = setup()
+
+    todo_list.mark_done_at(0)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [X] Buy milk
+    # [X] Clean room
+    # [ ] Go to gym
+
+    todo_list.mark_done_at(1)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [X] Buy milk
+    # [X] Clean room
+    # [ ] Go to gym
+
+    todo_list.mark_done_at(2)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [X] Buy milk
+    # [X] Clean room
+    # [X] Go to gym
+
+    try:
+        todo_list.mark_done_at(3)
+    except IndexError:
+        print('Expected IndexError: Got it!')
+
+    todo_list.mark_undone_at(0)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [X] Clean room
+    # [X] Go to gym
+
+    todo_list.mark_undone_at(1)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [ ] Clean room
+    # [X] Go to gym
+
+    todo_list.mark_undone_at(2)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [ ] Clean room
+    # [ ] Go to gym
+
+    try:
+        todo_list.mark_undone_at(3)
+    except IndexError:
+        print('Expected IndexError: Got it!')
+
 def main():
     step_1()
     step_2()
     step_3()
     step_4()
     step_5()
+    step_6()
+    step_7()
 
 main()
