@@ -90,11 +90,25 @@ class TodoList:
         
         return self._todos[idx]
     
+    def all_done(self):
+        return all(todo.done for todo in self._todos)
+    
+    def mark_all_done(self):
+        for todos in self._todos:
+            todos.done = True
+    
+    def mark_all_undone(self):
+        for todos in self._todos:
+            todos.done = False
+
     def mark_done_at(self, idx):
         self.todo_at(idx).done = True
 
     def mark_undone_at(self, idx):
         self.todo_at(idx).done = False
+
+    def remove_at(self, idx):
+        self._todos.pop(idx)
 
     def __str__(self):
         output_lines = [f'----- {self._title} -----']
@@ -147,8 +161,7 @@ def step_2():
 
 def step_3():
     '''
-    In this step, you need to customize the behavior of the len function,
-    which you can do with the __len__ magic method.
+    Get the lenghts of a Todos
     '''
     print('--------------------------------- Step 3')
     todo_list = setup()
@@ -213,6 +226,9 @@ def step_6():
     print(todo_list.todo_at(1) is todo_list.todo_at(1))  # True
 
 def step_7():
+    '''
+    Mark Todo as Completed or Not Completed by Index Position
+    '''
     print('--------------------------------- Step 7')
     todo_list = setup()
 
@@ -268,6 +284,80 @@ def step_7():
     except IndexError:
         print('Expected IndexError: Got it!')
 
+def step_8():
+    '''
+    Mark All Todos as Completed or Not Completed
+    '''
+    print('--------------------------------- Step 8')
+    todo_list = setup()
+
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [X] Clean room
+    # [ ] Go to gym
+
+    todo_list.mark_all_done()
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [X] Buy milk
+    # [X] Clean room
+    # [X] Go to gym
+
+    todo_list.mark_all_undone()
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [ ] Clean room
+    # [ ] Go to gym
+
+def step_9():
+    '''
+    Return True for all completed Todos
+    '''
+    print('--------------------------------- Step 9')
+    todo_list = setup()
+
+    print(todo_list.all_done())         # False
+
+    todo_list.mark_all_done()
+    print(todo_list.all_done())         # True
+
+    todo_list.mark_undone_at(1)
+    print(todo_list.all_done())         # False
+
+    print(empty_todo_list.all_done())   # True
+
+def step_10():
+    print('--------------------------------- Step 10')
+    todo_list = setup()
+
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [X] Clean room
+    # [ ] Go to gym
+
+    todo_list.remove_at(1)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [ ] Go to gym
+
+    todo_list.remove_at(1)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+
+    try:
+        todo_list.remove_at(1)
+    except IndexError:
+        print('Expected IndexError: Got it!')
+
+    todo_list.remove_at(0)
+    print(todo_list)
+    # ---- Today's Todos -----
+
 def main():
     step_1()
     step_2()
@@ -276,5 +366,8 @@ def main():
     step_5()
     step_6()
     step_7()
+    step_8()
+    step_9()
+    step_10()
 
 main()
