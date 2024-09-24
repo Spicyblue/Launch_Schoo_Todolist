@@ -50,6 +50,12 @@ class TodoList:
     
     def all_done(self):
         return all(todo.done for todo in self._todos)
+    
+    def done_todos(self):
+        return self.select(lambda todo: todo.done)
+
+    def undone_todos(self):
+        return self.select(lambda todo: not todo.done)
 
     def each(self, callback):
         for todos in self._todos:
@@ -66,12 +72,20 @@ class TodoList:
         return self._todos[-1]
     
     def mark_all_done(self):
-        for todos in self._todos:
-            todos.done = True
-    
+        def mark_done(todo):
+            todo.done = True
+
+        self.each(mark_done)
+
     def mark_all_undone(self):
-        for todos in self._todos:
-            todos.done = False
+        def mark_undone(todo):
+            todo.done = False
+
+        self.each(mark_undone)
+    
+    def mark_done(self, title):
+        found = self.find_by_title(title)
+        found.done = True
 
     def mark_done_at(self, idx):
         self.todo_at(idx).done = True
@@ -87,12 +101,6 @@ class TodoList:
             raise TypeError('Please enter an number')
         
         return self._todos[idx]
-    
-    def done_todos(self):
-        return self.select(lambda todo: todo.done)
-
-    def undone_todos(self):
-        return self.select(lambda todo: not todo.done)
     
     def select(self, callback):
         new_list = TodoList(self._title)
@@ -465,6 +473,7 @@ def step_14():
     '''
     Get Incomplete and Complete Todos
     '''
+
     print('--------------------------------- Step 14')
     todo_list = setup()
 
@@ -489,6 +498,27 @@ def step_14():
 
     print('\n')
 
+def step_15():
+    '''
+    Mark Todo Completed by Title
+    '''
+    print('--------------------------------- Step 15')
+    todo_list = setup()
+
+    todo_list.mark_done('Go to gym')
+    print(todo_list)
+    # ----- Today's Todos -----
+    # [ ] Buy milk
+    # [X] Clean room
+    # [X] Go to gym
+
+    try:
+        todo_list.mark_done('Feed cat')
+    except IndexError:
+        print('Expected IndexError: Got it!')
+    
+    print('\n')
+
 def main():
     step_1() 
     step_2()
@@ -504,7 +534,6 @@ def main():
     step_12()
     step_13()
     step_14()
+    step_15()
 
 main()
-
-
