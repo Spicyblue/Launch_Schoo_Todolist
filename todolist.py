@@ -47,13 +47,13 @@ class TodoList:
             raise TypeError('Can only add Todo Object ')
         
         self._todos.append(todo)
+    
+    def all_done(self):
+        return all(todo.done for todo in self._todos)
 
     def each(self, callback):
         for todos in self._todos:
             callback(todos)
-
-    def __len__(self):
-        return len(self._todos)
     
     def first(self):
         return self._todos[0]
@@ -64,18 +64,6 @@ class TodoList:
     
     def last(self):
         return self._todos[-1]
-    
-    def to_list(self):
-        return list(self._todos)
-    
-    def todo_at(self, idx):
-        if not isinstance(idx, int):
-            raise TypeError('Please enter an number')
-        
-        return self._todos[idx]
-    
-    def all_done(self):
-        return all(todo.done for todo in self._todos)
     
     def mark_all_done(self):
         for todos in self._todos:
@@ -90,7 +78,22 @@ class TodoList:
 
     def mark_undone_at(self, idx):
         self.todo_at(idx).done = False
+    
+    def to_list(self):
+        return list(self._todos)
+    
+    def todo_at(self, idx):
+        if not isinstance(idx, int):
+            raise TypeError('Please enter an number')
+        
+        return self._todos[idx]
+    
+    def done_todos(self):
+        return self.select(lambda todo: todo.done)
 
+    def undone_todos(self):
+        return self.select(lambda todo: not todo.done)
+    
     def select(self, callback):
         new_list = TodoList(self._title)
 
@@ -104,6 +107,9 @@ class TodoList:
 
     def remove_at(self, idx):
         self._todos.pop(idx)
+    
+    def __len__(self):
+        return len(self._todos)
 
     def __str__(self):
         output_lines = [f'----- {self._title} -----']
@@ -455,7 +461,33 @@ def step_13():
 
     print('\n')
 
-step_13()
+def step_14():
+    '''
+    Get Incomplete and Complete Todos
+    '''
+    print('--------------------------------- Step 14')
+    todo_list = setup()
+
+    done = todo_list.done_todos()
+    print(done)
+    # ----- Today's Todos -----
+    # [X] Clean room
+
+    undone = todo_list.undone_todos()
+    print(undone)
+    # ----- Today's Todos -----
+    # [ ] Buy milk
+    # [ ] Go to gym
+
+    done = empty_todo_list.done_todos()
+    print(done)
+    # ----- Nothing Doing -----
+
+    undone = empty_todo_list.undone_todos()
+    print(undone)
+    # ----- Nothing Doing -----
+
+    print('\n')
 
 def main():
     step_1() 
@@ -471,5 +503,8 @@ def main():
     step_11()
     step_12()
     step_13()
+    step_14()
 
 main()
+
+
