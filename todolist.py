@@ -1,29 +1,5 @@
 '''
-The Todo class represents a single todo item for our TodoList. 
-We'll need the following features:
-
-Each Todo object should have state that consists of a title for the todo and 
-a flag that indicates whether it has been completed.
-
-Both state attributes should be defined as properties.
-Both properties require a getter.
-Only the Todo completion property requires a setter.
-When printing Todo objects, they should be formatted as shown here:
-
-[ ] Buy milk
-[X] Clean room
-[ ] Go to gym
-
-In this format, [ ] indicates a Todo that hasn't been completed yet,
-while [X] indicates a completed Todo.
-We'll use a couple of class constants for the X and (blank) values.
-
-The text on the right is the title text.
-Two Todo objects are equal when they have the same values for the title and completion attributes.
-
-Based on the above requirements, try to come up with your own Todo class.
-The following code demonstrates how the Todo class works. You can use this code to test your class:
-
+The Todo List mini application
 '''
 class Todo:
     IS_DONE = 'X'
@@ -72,6 +48,10 @@ class TodoList:
         
         self._todos.append(todo)
 
+    def each(self, callback):
+        for todos in self._todos:
+            callback(todos)
+
     def __len__(self):
         return len(self._todos)
     
@@ -106,6 +86,17 @@ class TodoList:
 
     def mark_undone_at(self, idx):
         self.todo_at(idx).done = False
+
+    def select(self, callback):
+        new_list = TodoList(self._title)
+
+        def choose(todo):
+            if callback(todo):
+                new_list.add(todo)
+           
+        self.each(choose)
+
+        return new_list
 
     def remove_at(self, idx):
         self._todos.pop(idx)
@@ -146,6 +137,8 @@ def step_1():
     for todo in todo_list._todos:
         print(todo)
 
+    print('\n')
+
 def step_2():
     '''
     Output Formatting.
@@ -159,15 +152,18 @@ def step_2():
     # [X] Clean room
     # [ ] Go to gym
 
+    print('\n')
+
 def step_3():
     '''
-    Get the lenghts of a Todos
+    Get the Lenghts of a Todos
     '''
     print('--------------------------------- Step 3')
     todo_list = setup()
 
     print(len(todo_list))              # 3
     print(len(empty_todo_list))        # 0
+    print('\n')
 
 def step_4():
     '''
@@ -189,6 +185,8 @@ def step_4():
     except IndexError:
         print('Expected IndexError: Got it!')
 
+    print('\n')
+
 def step_5():
     '''
     Obtaining Todos as a List.
@@ -205,6 +203,7 @@ def step_5():
         print(todo)                     # [ ] Buy milk
                                         # [X] Clean room
                                         # [ ] Go to gym
+    print('\n')
 
 def step_6():
     '''
@@ -224,6 +223,7 @@ def step_6():
 
     # Ensure we have a reference
     print(todo_list.todo_at(1) is todo_list.todo_at(1))  # True
+    print('\n')
 
 def step_7():
     '''
@@ -284,9 +284,11 @@ def step_7():
     except IndexError:
         print('Expected IndexError: Got it!')
 
+    print('\n')
+
 def step_8():
     '''
-    Mark All Todos as Completed or Not Completed
+    Mark all Todos as Completed or Not Completed
     '''
     print('--------------------------------- Step 8')
     todo_list = setup()
@@ -311,9 +313,11 @@ def step_8():
     # [ ] Clean room
     # [ ] Go to gym
 
+    print('\n')
+
 def step_9():
     '''
-    Return True for all completed Todos
+    Return True for all Completed Todos
     '''
     print('--------------------------------- Step 9')
     todo_list = setup()
@@ -328,7 +332,12 @@ def step_9():
 
     print(empty_todo_list.all_done())   # True
 
+    print('\n')
+
 def step_10():
+    '''
+    Remove a Todo by Index
+    '''
     print('--------------------------------- Step 10')
     todo_list = setup()
 
@@ -358,8 +367,62 @@ def step_10():
     print(todo_list)
     # ---- Today's Todos -----
 
+    print('\n')
+
+def step_11():
+    '''
+    Add a Generic Iteration Method to the TodoList
+    '''
+    print('--------------------------------- Step 11')
+    todo_list = setup()
+
+    todo_list.mark_all_undone()
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [ ] Clean room
+    # [ ] Go to gym
+
+    def done_if_y_in_title(todo):
+        if 'y' in todo.title:
+            todo.done = True
+
+    todo_list.each(done_if_y_in_title)
+    print(todo_list)
+    # ---- Today's Todos -----
+    # [X] Buy milk
+    # [ ] Clean room
+    # [X] Go to gym
+
+    todo_list.each(lambda todo: print('>>>', todo))
+    # >>> [X] Buy milk
+    # >>> [ ] Clean room
+    # >>> [X] Go to gym
+    print('\n')
+
+def step_12():
+    '''
+    Selecting Todos
+    '''
+    print('--------------------------------- Step 12')
+    todo_list = setup()
+
+    def y_in_title(todo):
+        return 'y' in todo.title
+
+    print(todo_list.select(lambda todo: y_in_title))
+    # ---- Today's Todos -----
+    # [ ] Buy milk
+    # [ ] Go to gym
+
+    print(todo_list.select(lambda todo: todo.done))
+    # ---- Today's Todos -----
+    # [X] Clean room
+
+    print('\n')
+
 def main():
-    step_1()
+    step_1() 
     step_2()
     step_3()
     step_4()
@@ -369,5 +432,7 @@ def main():
     step_8()
     step_9()
     step_10()
+    step_11()
+    step_12()
 
 main()
