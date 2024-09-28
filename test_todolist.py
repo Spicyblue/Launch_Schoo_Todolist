@@ -36,6 +36,41 @@ class TestTodoList(unittest.TestCase):
         with self.assertRaises(TypeError, msg= "This is not a todo object"):
             self.todos.add(self.todos)
 
+    def test_todo_at(self):
+        self.assertEqual(self.todo1, self.todos.todo_at(0), "This is not the right value for the index")
+        self.assertEqual(self.todo2, self.todos.todo_at(1), "This is not the right value for the index")
+        self.assertEqual(self.todo3, self.todos.todo_at(2), "This is not the right value for the index")
+        with self.assertRaises(TypeError, msg= "Enter an integer number"):
+            self.todos.todo_at('One')
+        with self.assertRaises(IndexError, msg= "This index is not accessible"):
+            self.todos.todo_at(5)
+    
+    def test_mark_done_at(self):
+        with self.assertRaises(TypeError, msg= "Enter an integer number"):
+            self.todos.mark_done_at('One')
+        with self.assertRaises(IndexError, msg= "This index is not accessible"):
+            self.todos.mark_done_at(5)
+        
+        self.todos.mark_done_at(1)
+        self.assertFalse(self.todo1.done, "This is True")
+        self.assertTrue(self.todo2.done, "This is False")
+        self.assertFalse(self.todo3.done, "This is True")
+
+    def test_mark_undone_At(self):
+        with self.assertRaises(TypeError, msg= "Enter an integer number"):
+            self.todos.mark_undone_at('One')
+        with self.assertRaises(IndexError, msg= "This index is not accessible"):
+            self.todos.mark_undone_at(5)
+
+        self.todo1.done = True
+        self.todo2.done = True
+        self.todo3.done = True
+        
+        self.todos.mark_undone_at(0)
+        self.assertFalse(self.todo1.done, "This is True")
+        self.assertTrue(self.todo2.done, "This is False")
+        self.assertTrue(self.todo3.done, "This is False")
+
 if __name__ == "__main__":
     print('Test starting')
     try:
