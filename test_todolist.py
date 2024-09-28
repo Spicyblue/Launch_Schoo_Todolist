@@ -15,6 +15,13 @@ class TestTodoList(unittest.TestCase):
     def test_length(self):
         self.assertEqual(3, len(self.todos), "Not exactly 3 todos in your list")
 
+    def test_to_list(self):
+        todo_list = [self.todo1, self.todo2, self.todo3]
+        self.assertEqual(todo_list, self.todos.to_list(), "List objects are not equall")
+
+    def test_first(self):
+        self.assertEqual(self.todo1, self.todos.first(), "This is not the first todo")
+
 if __name__ == "__main__":
     print('Test starting')
     try:
