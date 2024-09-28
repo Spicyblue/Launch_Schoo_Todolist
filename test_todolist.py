@@ -20,10 +20,10 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(todo_list, self.todos.to_list(), "These objects are not equall")
 
     def test_first(self):
-        self.assertEqual(self.todo1, self.todos.first(), "This is not the first todo")
+        self.assertEqual(self.todo1, self.todos.first(), "These objects are the same")
 
     def test_last(self):
-        self.assertEqual(self.todo3, self.todos.last(), "This is not the last todo")
+        self.assertEqual(self.todo3, self.todos.last(), "These objects are the same")
     
     def test_all_done(self):
         self.assertFalse(self.todos.all_done(), "This is True")
@@ -90,7 +90,7 @@ class TestTodoList(unittest.TestCase):
 
         self.todos.remove_at(1)
         self.assertEqual(2, len(self.todos), "These objects have different lengths")
-        self.assertEqual([self.todo1, self.todo3], self.todos.to_list(), "These objects are not equall")
+        self.assertEqual([self.todo1, self.todo3], self.todos.to_list(), "These objects are not equal")
 
     def test_str(self):
         string = (
@@ -134,7 +134,7 @@ class TestTodoList(unittest.TestCase):
         selected = self.todos.select(lambda todo: todo.done)
         self.assertEqual("----- Today's Todos -----\n[X] Buy milk",
                      str(selected), "These objects are not equal")
-        self.assertIsInstance(selected, TodoList, )
+        self.assertIsInstance(selected, TodoList, "These objects are of the different class" )
 
 if __name__ == "__main__":
     print('Test starting')
