@@ -71,6 +71,50 @@ class TestTodoList(unittest.TestCase):
         self.assertTrue(self.todo2.done, "This is False")
         self.assertTrue(self.todo3.done, "This is False")
 
+    def test_mark_all_done(self):
+        self.todo1.done = False
+        self.todo2.done = False
+        self.todo3.done = False
+
+        self.todos.mark_all_done()
+        self.assertTrue(self.todo1.done, "This is False")
+        self.assertTrue(self.todo2.done, "This is False")
+        self.assertTrue(self.todo3.done, "This is False")
+        self.assertTrue(self.todos.all_done())
+
+    def test_remove_at(self):
+        with self.assertRaises(TypeError, msg= "Enter an integer number"):
+            self.todos.remove_at('One')
+        with self.assertRaises(IndexError, msg= "This index is not accessible"):
+            self.todos.remove_at(5)
+
+
+        self.todos.remove_at(1)
+        self.assertEqual(2, len(self.todos), "Not exactly 3 todos in your list")
+        self.assertEqual([self.todo1, self.todo3], self.todos.to_list(), "This has more items in the todo list")
+
+    
+    def test_str(self):
+        string = (
+        "----- Today's Todos -----\n"
+        "[ ] Buy milk\n"
+        "[ ] Clean room\n"
+        "[ ] Go to the gym"
+        )
+        self.assertEqual(string, str(self.todos))
+
+    def test_str_done_todo(self):
+        string = (
+        "----- Today's Todos -----\n"
+        "[ ] Buy milk\n"
+        "[X] Clean room\n"
+        "[ ] Go to the gym"
+        )
+        self.todos.mark_done_at(1)
+        self.assertEqual(string, str(self.todos))
+
+    
+
 if __name__ == "__main__":
     print('Test starting')
     try:
