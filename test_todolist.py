@@ -22,6 +22,20 @@ class TestTodoList(unittest.TestCase):
     def test_first(self):
         self.assertEqual(self.todo1, self.todos.first(), "This is not the first todo")
 
+    def test_last(self):
+        self.assertEqual(self.todo3, self.todos.last(), "This is not the last todo")
+    
+    def test_all_done(self):
+        self.assertFalse(self.todos.all_done(), "Some todos to be done")
+
+    def test_add_invalid(self):
+        with self.assertRaises(TypeError, msg= "This is not a todo object"):
+            self.todos.add(123)
+        with self.assertRaises(TypeError, msg= "This is not a todo object"):
+            self.todos.add('Fix Computer')
+        with self.assertRaises(TypeError, msg= "This is not a todo object"):
+            self.todos.add(self.todos)
+
 if __name__ == "__main__":
     print('Test starting')
     try:
