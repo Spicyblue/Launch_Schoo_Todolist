@@ -13,11 +13,11 @@ class TestTodoList(unittest.TestCase):
         self.todos.add(self.todo3)
 
     def test_length(self):
-        self.assertEqual(3, len(self.todos), "Not exactly 3 todos in your list")
+        self.assertEqual(3, len(self.todos), "These objects have different lenght")
 
     def test_to_list(self):
         todo_list = [self.todo1, self.todo2, self.todo3]
-        self.assertEqual(todo_list, self.todos.to_list(), "List objects are not equall")
+        self.assertEqual(todo_list, self.todos.to_list(), "These objects are not equall")
 
     def test_first(self):
         self.assertEqual(self.todo1, self.todos.first(), "This is not the first todo")
@@ -26,7 +26,7 @@ class TestTodoList(unittest.TestCase):
         self.assertEqual(self.todo3, self.todos.last(), "This is not the last todo")
     
     def test_all_done(self):
-        self.assertFalse(self.todos.all_done(), "Some todos to be done")
+        self.assertFalse(self.todos.all_done(), "This is True")
 
     def test_add_invalid(self):
         with self.assertRaises(TypeError, msg= "This is not a todo object"):
@@ -88,12 +88,10 @@ class TestTodoList(unittest.TestCase):
         with self.assertRaises(IndexError, msg= "This index is not accessible"):
             self.todos.remove_at(5)
 
-
         self.todos.remove_at(1)
-        self.assertEqual(2, len(self.todos), "Not exactly 3 todos in your list")
-        self.assertEqual([self.todo1, self.todo3], self.todos.to_list(), "This has more items in the todo list")
+        self.assertEqual(2, len(self.todos), "These objects have different lengths")
+        self.assertEqual([self.todo1, self.todo3], self.todos.to_list(), "These objects are not equall")
 
-    
     def test_str(self):
         string = (
         "----- Today's Todos -----\n"
@@ -111,9 +109,32 @@ class TestTodoList(unittest.TestCase):
         "[ ] Go to the gym"
         )
         self.todos.mark_done_at(1)
-        self.assertEqual(string, str(self.todos))
+        self.assertEqual(string, str(self.todos), "These objects are not equal")
 
-    
+    def test_str_all_done_todos(self):
+        string = (
+        "----- Today's Todos -----\n"
+        "[X] Buy milk\n"
+        "[X] Clean room\n"
+        "[X] Go to the gym"
+        )
+        self.todos.mark_all_done()
+        self.assertEqual(string, str(self.todos), "These objects are not equal")
+
+    def test_each(self):
+        self.todos.each(lambda todo: setattr(todo, 'done', True))
+        self.assertTrue(self.todos.all_done(), "This is False")
+
+        result = []
+        self.todos.each(lambda todo: result.append(todo))
+        self.assertEqual([self.todo1, self.todo2, self.todo3], result, "These objects are not equal")
+
+    def test_select(self):
+        self.todo1.done = True
+        selected = self.todos.select(lambda todo: todo.done)
+        self.assertEqual("----- Today's Todos -----\n[X] Buy milk",
+                     str(selected), "These objects are not equal")
+        self.assertIsInstance(selected, TodoList, )
 
 if __name__ == "__main__":
     print('Test starting')
